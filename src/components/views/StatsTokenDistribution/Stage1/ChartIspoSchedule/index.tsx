@@ -31,12 +31,10 @@ const ChartIspoSchedule = () => {
     getStats()
   }, [])
 
-  let theme = "light"
-  if (typeof window !== "undefined") {
-    theme = localStorage.getItem("vocs.theme") ? "dark" : "light"
-  }
   const distributed = history?.history || []
-  const isLight = theme === "light"
+  const isLight =
+    typeof document === "undefined" ||
+    (!document.documentElement.classList.contains("rp-dark") && !document.documentElement.classList.contains("dark"))
   const hoverColor = isLight ? "#000" : "#fff"
 
   const chartData = {

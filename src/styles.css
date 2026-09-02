@@ -1,7 +1,4 @@
-@import url("https://cdn.xray.app/fonts/satoshi.css");
-@import "tailwindcss";
 @import "./styles/tailwind.css";
 @import "./styles/core.css";
 @import "./styles/antd/style.css";
 @import "./styles/shared/style.css";
-@import "./styles/__tailwind/style.css";

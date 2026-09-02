@@ -1,4 +1,4 @@
-@import "@/styles/tailwind.css";
+@reference "../../../styles/tailwind.css";
 
 .description {
   @apply mb-3 text-gray-500;

@@ -1,4 +1,4 @@
-@import "@/styles/tailwind.css";
+@reference "../tailwind.css";
 
 .ant-dropdown-menu-item-divider {
   @apply bg-transparent! my-2!;

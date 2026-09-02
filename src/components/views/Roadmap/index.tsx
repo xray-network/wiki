@@ -63,7 +63,7 @@ const RoadmapSection = ({ items }: { items: TimelineData[] }) => {
                 <div className="text-gray-500">
                   <ol className="mb-5">
                     {item.items?.map((subItem, index) => (
-                      <li key={index} className="border-b border-gray-200 dark-border-gray-800">
+                      <li key={index} className="border-b border-gray-200 dark:border-gray-800">
                         <small>{getStatus(subItem.status)}</small> {subItem.description}
                       </li>
                     ))}
@@ -99,7 +99,7 @@ const Roadmap = () => {
       {roadmapItems.map((item, index) => {
         return (
           <div key={index} className="mb-10">
-            <h4 className="text-2xl text-black dark-text-white mb-5">
+            <h4 className="text-2xl text-black dark:text-white mb-5">
               {item.year} — {item.title}
             </h4>
             <RoadmapSection items={item.data} />

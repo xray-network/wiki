@@ -1,10 +1,16 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(html.dark, html.dark *));
+@custom-variant dark (&:where(html.dark, html.dark *, html.rp-dark, html.rp-dark *));
+
+/* Shared by Tailwind utilities, Rspress, and Ant Design's CSS cascade. */
+:root {
+  --font-sans:
+    "-apple-system-body", "ui-sans-serif", "-apple-system", "system-ui", "Segoe UI", "Helvetica", "Apple Color Emoji",
+    "Arial", "sans-serif", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-mono: "ui-monospace", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "Liberation Mono", "monospace";
+}
 
 @theme {
-  --font-sans: "satoshi", sans-serif;
-
   --color-white: #ffffff;
   --color-black: #000000;
 
@@ -53,6 +59,8 @@
   --color-gray-950: #0e0e18;
 }
 
+html.dark,
+html.rp-dark,
 [data-theme="dark"] {
   --color-blue: #5e69ff;
   --color-blue-50: #f7fbff;

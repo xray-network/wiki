@@ -4,39 +4,41 @@ import { StyleProvider, px2remTransformer } from "@ant-design/cssinjs"
 import type { ThemeConfig } from "antd"
 import merge from "lodash/merge"
 import EscapeAntd from "./escapeAntd"
+import { fontFamily, metaThemeColor, palette, paletteDark, radius, semantic } from "./tokens"
 
 export const colors = {
-  white: "#F6F7F2",
-  black: "#000000",
-  blue500: "#1940ed",
-  blue500dark: "#5e69ff",
-  blue300dark: "#bfd6ff",
-  orange500: "#f97316",
-  red500: "#ef4444",
-  green500: "#15e4a3",
-  gray50: "#f9fafb",
-  gray100: "#f3f4f6",
-  gray200: "#e5e7eb",
-  gray300: "#d1d5db",
-  gray400: "#9ca3af",
-  gray500: "#6e758d",
-  gray600: "#55556d",
-  gray700: "#374151",
-  gray800: "#1f2937",
-  gray900: "#1e2232",
-  gray950: "#0e0e18",
-  whitePopupShadow: "0 6px 30px 0 rgba(0,0,0,.03), 0 3px 6px -4px rgba(0,0,0,.03), 0 9px 28px 8px rgba(0,0,0,.03)",
-  darkPopupShadow: "0 0 60px 0 rgba(60, 60, 70, .5)",
+  white: palette.white,
+  offWhite: palette.offWhite,
+  black: palette.black,
+  blue500: palette.blue[500],
+  blue500dark: paletteDark.blue[500],
+  blue300dark: paletteDark.blue[300],
+  orange500: palette.orange[500],
+  red500: palette.red[500],
+  green500: palette.green[500],
+  gray50: palette.gray[50],
+  gray100: palette.gray[100],
+  gray200: palette.gray[200],
+  gray300: palette.gray[300],
+  gray400: palette.gray[400],
+  gray500: palette.gray[500],
+  gray600: palette.gray[600],
+  gray700: palette.gray[700],
+  gray800: palette.gray[800],
+  gray900: palette.gray[900],
+  gray950: palette.gray[950],
+  whitePopupShadow: semantic.light.popupShadow,
+  darkPopupShadow: semantic.dark.popupShadow,
 }
 
 export const restTheme: Partial<ThemeConfig> = {
   token: {
-    fontFamily: '"satoshi", sans',
+    fontFamily,
     fontSize: 16,
     colorSuccess: colors.green500,
     colorWarning: colors.orange500,
     colorError: colors.red500,
-    borderRadius: 10,
+    borderRadius: radius.base,
   },
   components: {
     Button: {
@@ -73,7 +75,7 @@ export const restTheme: Partial<ThemeConfig> = {
       horizontalItemGutter: 25,
     },
     Modal: {
-      borderRadiusLG: 20,
+      borderRadiusLG: radius.lg,
     },
     Upload: {
       colorFillAlter: "transparent",
@@ -84,9 +86,12 @@ export const restTheme: Partial<ThemeConfig> = {
 export const lightTheme: Partial<ThemeConfig> = {
   algorithm: theme.defaultAlgorithm,
   token: merge({}, restTheme.token, {
-    colorPrimary: colors.blue500,
-    colorInfo: colors.blue500,
-    colorFillAlter: colors.white,
+    colorPrimary: semantic.light.primary,
+    colorInfo: semantic.light.primary,
+    colorSuccess: semantic.light.success,
+    colorWarning: semantic.light.warning,
+    colorError: semantic.light.error,
+    colorFillAlter: colors.offWhite,
     colorText: colors.black,
     colorBorder: colors.gray300,
   }),
@@ -149,8 +154,11 @@ export const lightTheme: Partial<ThemeConfig> = {
 export const darkTheme: Partial<ThemeConfig> = {
   algorithm: theme.darkAlgorithm,
   token: merge({}, restTheme.token, {
-    colorPrimary: colors.blue500dark,
-    colorInfo: colors.blue500dark,
+    colorPrimary: semantic.dark.primary,
+    colorInfo: semantic.dark.primary,
+    colorSuccess: semantic.dark.success,
+    colorWarning: semantic.dark.warning,
+    colorError: semantic.dark.error,
     colorFillAlter: colors.black,
     colorText: colors.white,
     colorBorder: colors.gray700,
@@ -276,7 +284,9 @@ const Theme = ({ children, theme }: { children: React.ReactNode; theme: "light" 
       setAntdTheme(antdTheme)
       html.setAttribute("data-disable-transitions", "true")
       html.setAttribute("data-theme", theme)
-      html.querySelector("meta[name='theme-color']")?.setAttribute("content", theme === "light" ? "#ffffff" : "#131318")
+      html
+        .querySelector("meta[name='theme-color']")
+        ?.setAttribute("content", theme === "light" ? metaThemeColor.light : metaThemeColor.dark)
       setTimeout(() => {
         html.removeAttribute("data-disable-transitions")
       }, 500)

@@ -1,4 +1,4 @@
-@import "@/styles/tailwind.css";
+@reference "../tailwind.css";
 
 .shared-table {
   white-space: nowrap;
@@ -70,6 +70,8 @@
   }
 }
 
+html.dark .shared-table-custom,
+html.rp-dark .shared-table-custom,
 [data-theme="dark"] .shared-table-custom {
   tbody {
     tr {

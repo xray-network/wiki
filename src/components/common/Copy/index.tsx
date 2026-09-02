@@ -1,41 +1,63 @@
-import { useState, useRef } from "react"
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react"
 import { Tooltip } from "antd"
+
+type CopyState = "idle" | "copied" | "error"
 
 const Copy = ({
   children,
   copy,
   tooltipMessage = "Copy to Clipboard",
-  tooltipSuccess = "Copied!..",
+  tooltipSuccess = "Copied!",
+  tooltipError = "Unable to copy",
 }: {
-  children: React.ReactNode
+  children: ReactNode
   copy: string
   tooltipMessage?: string
   tooltipSuccess?: string
+  tooltipError?: string
 }) => {
-  const [copied, setCopied] = useState(false)
-  const tooltip = !copied ? tooltipMessage : tooltipSuccess
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [state, setState] = useState<CopyState>("idle")
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const tooltip = state === "copied" ? tooltipSuccess : state === "error" ? tooltipError : tooltipMessage
 
-  const process = () => {
-    // message.success(tooltipSuccess)
-    setCopied(true)
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
+  useEffect(
+    () => () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    },
+    []
+  )
+
+  const resetAfterDelay = useCallback((nextState: CopyState) => {
+    setState(nextState)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    timeoutRef.current = setTimeout(() => setState("idle"), 2000)
+  }, [])
+
+  const copyToClipboard = useCallback(async () => {
+    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard API is unavailable")
+      await navigator.clipboard.writeText(copy)
+      resetAfterDelay("copied")
+    } catch {
+      resetAfterDelay("error")
     }
-    timeoutRef.current = setTimeout(() => setCopied(false), 2000)
+  }, [copy, resetAfterDelay])
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") return
+    event.preventDefault()
+    void copyToClipboard()
   }
 
   return (
     <span
-      onClick={() => {
-        if (typeof navigator !== "undefined" && navigator.clipboard) {
-          navigator.clipboard.writeText(copy).then(process)
-        }
-      }}
+      role="button"
+      tabIndex={0}
+      aria-label={tooltip}
+      onClick={() => void copyToClipboard()}
+      onKeyDown={handleKeyDown}
     >
-      <Tooltip title={tooltip} onOpenChange={() => setCopied(false)}>
-        {children}
-      </Tooltip>
+      <Tooltip title={tooltip}>{children}</Tooltip>
     </span>
   )
 }

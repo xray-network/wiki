@@ -1,43 +1,56 @@
-import { useEffect, useState, ReactNode, use } from "react"
-import { useLocation } from "react-router-dom"
-import { useMiniAppClientMessaging, type HostMessage } from "xray-mini-app-sdk-react"
+import { useEffect, useState, type ReactNode } from "react"
+import { useDark, useLocation } from "@rspress/core/runtime"
+import { clientPlatformV1 } from "@xray-network/xray-js/mini-app-bridge"
 import AntdTheme from "@/styles/antdTheme"
-import { set } from "lodash"
+
+type Theme = clientPlatformV1.Theme
+
+function MiniAppBridge({ route, onTheme }: { route: string; onTheme: (theme: Theme) => void }) {
+  useEffect(() => {
+    let active = true
+    const stopListening = clientPlatformV1.listen("theme", ({ payload }) => onTheme(payload))
+
+    void clientPlatformV1
+      .getTheme()
+      .then((message) => {
+        if (active && message) onTheme(message.payload)
+      })
+      .catch(() => undefined)
+
+    return () => {
+      active = false
+      stopListening()
+    }
+  }, [onTheme])
+
+  useEffect(() => {
+    clientPlatformV1.routeChanged(route)
+  }, [route])
+
+  return null
+}
 
 export default function Layout({ children }: { children: ReactNode }) {
+  const isDark = useDark()
   const location = useLocation()
   const route = location.pathname + location.search + location.hash
+  const [mounted, setMounted] = useState(false)
+  const [hostTheme, setHostTheme] = useState<Theme>()
+  const theme: Theme = hostTheme ?? (isDark ? "dark" : "light")
 
-  const [theme, setTheme] = useState<"light" | "dark">("light")
+  useEffect(() => setMounted(true), [])
 
-  if (typeof window !== "undefined") {
-    const { sendMessage: sendMessageToXRAY, isConnected } = useMiniAppClientMessaging(handleXRAYMessage)
-    const theme = localStorage.getItem("vocs.theme") === "dark" ? "dark" : "light"
+  useEffect(() => {
+    const html = document.documentElement
+    html.classList.toggle("rp-dark", theme === "dark")
+    html.classList.toggle("dark", theme === "dark")
+    html.classList.toggle("light", theme === "light")
+  }, [theme])
 
-    useEffect(() => {
-      setTheme(theme)
-    }, [])
-
-    function handleXRAYMessage(message: HostMessage) {
-      if (message.type === "xray.host.theme") {
-        const theme = message.payload.theme
-        document.documentElement.classList.remove("light", "dark")
-        document.documentElement.classList.add(theme)
-        localStorage.setItem("vocs.theme", theme)
-        setTheme(theme)
-      }
-    }
-
-    useEffect(() => {
-      if (isConnected) {
-        sendMessageToXRAY("xray.client.getTheme")
-      }
-    }, [isConnected])
-
-    useEffect(() => {
-      sendMessageToXRAY("xray.client.routeChanged", { route })
-    }, [route])
-  }
-
-  return <AntdTheme theme={theme}>{children}</AntdTheme>
+  return (
+    <AntdTheme theme={theme}>
+      {mounted && <MiniAppBridge route={route} onTheme={setHostTheme} />}
+      {children}
+    </AntdTheme>
+  )
 }

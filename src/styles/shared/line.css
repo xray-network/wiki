@@ -1,4 +1,4 @@
-@import "@/styles/tailwind.css";
+@reference "../tailwind.css";
 
 .shared-line {
   @apply border-b border-gray-200 dark:border-gray-700;

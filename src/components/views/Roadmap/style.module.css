@@ -1,4 +1,4 @@
-@import "@/styles/tailwind.css";
+@reference "../../../styles/tailwind.css";
 
 .roadmap {
   :global(.ant-steps-item-icon) {

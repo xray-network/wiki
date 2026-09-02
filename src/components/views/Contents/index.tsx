@@ -1,6 +1,6 @@
 import { Row, Col } from "antd"
 import { menuConfig } from "@/config/menu"
-import { Link } from "react-router-dom"
+import { Link } from "@rspress/core/runtime"
 import { ArrowRightIcon } from "@heroicons/react/24/outline"
 import style from "./style.module.css"
 
