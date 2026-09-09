@@ -1,3 +1,5 @@
+@import "./spectre.css";
+
 /* Rspress variables mapped from XRAY/App's shared design-system tokens. */
 html:root {
   --rp-font-family-base: var(--font-sans);
@@ -121,4 +123,102 @@ html:root {
 .rp-codeblock,
 .rp-codeblock__title {
   border-radius: 10px;
+}
+
+/* Wiki homepage additions built on the SPECTRE documentation shell. */
+.wiki-hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  color: var(--xr-link);
+  font: 600 11px/1.5 var(--xr-font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.wiki-hero-kicker::before {
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+  content: "";
+}
+
+.wiki-fact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 26px;
+  border: 1px solid var(--xr-border-strong);
+  border-radius: var(--spectre-home-radius);
+  background: var(--xr-panel);
+}
+
+.wiki-fact {
+  min-width: 0;
+  padding: 20px;
+}
+
+.wiki-fact + .wiki-fact {
+  border-left: 1px solid var(--xr-border-strong);
+}
+
+.wiki-fact strong,
+.wiki-fact span {
+  display: block;
+}
+
+.wiki-fact strong {
+  color: var(--xr-fg);
+  font-size: 16px;
+  letter-spacing: -.02em;
+}
+
+.wiki-fact span {
+  margin-top: 4px;
+  color: var(--xr-fg-muted);
+  font: 500 10px/1.5 var(--xr-font-mono);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.wiki-card-link {
+  color: inherit;
+}
+
+.wiki-card-link:hover {
+  color: var(--xr-link);
+}
+
+.wiki-resource-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wiki-resource-grid .spectre-resource:nth-child(odd) {
+  border-left: 0;
+}
+
+.wiki-resource-grid .spectre-resource:nth-child(n + 3) {
+  border-top: 1px solid var(--xr-border-strong);
+}
+
+.wiki-section-intro {
+  margin-bottom: 28px !important;
+  font-size: 14px;
+}
+
+@media (max-width: 520px) {
+  .wiki-fact-grid,
+  .wiki-resource-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wiki-fact + .wiki-fact {
+    border-left: 0;
+    border-top: 1px solid var(--xr-border-strong);
+  }
+
+  .wiki-resource-grid .spectre-resource + .spectre-resource {
+    border-left: 0;
+    border-top: 1px solid var(--xr-border-strong);
+  }
 }

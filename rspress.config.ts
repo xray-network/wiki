@@ -73,7 +73,7 @@ export default defineConfig({
   },
   themeConfig: {
     darkMode: "auto",
-    enableAppearanceAnimation: true,
+    enableAppearanceAnimation: false,
     nav: [
       { text: "Wiki", link: "https://wiki.xraynetwork.io/" },
       { text: "XRAY JS", link: "https://wiki.xraynetwork.io/xray-js/" },
